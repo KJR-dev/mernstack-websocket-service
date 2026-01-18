@@ -1,4 +1,5 @@
 import { Consumer, EachMessagePayload, Kafka } from "kafkajs";
+import socket from "../socket";
 import { MessageBroker } from "../types/broker";
 
 export class KafkaBroker implements MessageBroker {
@@ -39,6 +40,18 @@ export class KafkaBroker implements MessageBroker {
           topic,
           partition,
         });
+        switch (topic) {
+          case "order": {
+            // todo: maybe check event_type ?
+            const order = JSON.parse(message.value.toString());
+            socket.io.to(order.data.tenantId).emit("order-update", order);
+            break;
+          }
+
+          default:
+            console.log("Doing nothing");
+            break;
+        }
       },
     });
   }
