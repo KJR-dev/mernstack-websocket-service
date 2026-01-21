@@ -1,12 +1,19 @@
+import config from "config";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 
 const webSocketServer = createServer();
 
 // todo: move origin value to the config
+
+const ALLOWED_DOMAINS = [
+  config.get("frontend.clientUI"),
+  config.get("frontend.adminUI"),
+];
+
 const io = new Server(webSocketServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: ALLOWED_DOMAINS as string[],
   },
 });
 
