@@ -8,9 +8,7 @@ export const createMessageBroker = (): MessageBroker => {
   console.log("connecting to kafka broker...");
   // singleton
   if (!broker) {
-    broker = new KafkaBroker("websocket-service", [
-      config.get("kafka.broker"),
-    ]);
+    broker = new KafkaBroker("websocket-service", config.get("kafka.broker"));
   }
   return broker;
 };
